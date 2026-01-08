@@ -40,8 +40,11 @@ app.post('/addcard', async (req, res) => {
         await connection.execute('INSERT INTO cards (card_name, card_pic) VALUES (?, ?)', [card_name, card_pic]);
         res.status(201).json({message: 'Card ' + card_name + ' added successfully'});
     } catch (err) {
-        console.error(err);
-        res.status(500).json({message: 'Server error - could not add card ' + card_name});
-
+        console.error("DB ERROR:", err);
+        return res.status(500). json({
+            message: "DB error",
+            error: err.message,
+            sqlMessage: err.sqlMessage
+        });
     }
 });
